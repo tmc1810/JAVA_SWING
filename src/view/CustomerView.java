@@ -38,6 +38,18 @@ public class CustomerView extends javax.swing.JFrame {
         }
     }
 
+    private boolean isNumeric(String str) {
+        if (str == null || str.length() == 0) {
+            return false;
+        }
+
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -51,7 +63,7 @@ public class CustomerView extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
+        btnXuatFile = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblClient = new javax.swing.JTable();
@@ -97,13 +109,13 @@ public class CustomerView extends javax.swing.JFrame {
             }
         });
 
-        btnEdit.setBackground(new java.awt.Color(0, 113, 194));
-        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
-        btnEdit.setText("Chỉnh sửa");
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+        btnXuatFile.setBackground(new java.awt.Color(0, 113, 194));
+        btnXuatFile.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnXuatFile.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatFile.setText("Xuất file");
+        btnXuatFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
+                btnXuatFileActionPerformed(evt);
             }
         });
 
@@ -117,6 +129,12 @@ public class CustomerView extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPane3MouseClicked(evt);
+            }
+        });
+
         tblClient.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -125,6 +143,11 @@ public class CustomerView extends javax.swing.JFrame {
                 " Mã khách hàng", "Tên khách hàng", "Số điện thoại", "Địa chỉ"
             }
         ));
+        tblClient.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClientMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblClient);
 
         btnSearch.setBackground(new java.awt.Color(0, 113, 194));
@@ -216,20 +239,6 @@ public class CustomerView extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnAdd))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtAddress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBook, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -246,7 +255,22 @@ public class CustomerView extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtName))
-                                .addGap(18, 18, 18)))))
+                                .addGap(18, 18, 18))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBook, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnAdd)
+                                    .addComponent(btnXuatFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)))
+                        .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtTK, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +282,7 @@ public class CustomerView extends javax.swing.JFrame {
                         .addContainerGap())))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnDelete, btnEdit, btnUpdate});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnDelete, btnUpdate, btnXuatFile});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,12 +313,12 @@ public class CustomerView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
-                            .addComponent(btnEdit))
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDelete))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDelete)
+                            .addComponent(btnXuatFile))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                         .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
                 .addContainerGap())
@@ -304,7 +328,7 @@ public class CustomerView extends javax.swing.JFrame {
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtAddress, txtID, txtName, txtPhone});
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAdd, btnDelete, btnEdit, btnUpdate});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAdd, btnDelete, btnUpdate, btnXuatFile});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -323,16 +347,22 @@ public class CustomerView extends javax.swing.JFrame {
                     || txtAddress.getText().equals("") || txtPhone.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Hãy điền đầy đủ thông tin!");
             } else if (ClientsInfomationDAO.addClient(r)) {
-                list.add(r);
-                JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng thành công!");
-                showResult();
-                txtID.setText("");
-                txtName.setText("");
-                txtAddress.setText("");
-                txtPhone.setText("");
+                if (!isNumeric(txtPhone.getText())) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
+                    return;
+                } else {
+                    list.add(r);
+                    JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng thành công!");
+                    showResult();
+                    txtID.setText("");
+                    txtName.setText("");
+                    txtAddress.setText("");
+                    txtPhone.setText("");
+                }
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng không thành công!");
             }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -351,17 +381,10 @@ public class CustomerView extends javax.swing.JFrame {
 
 
 //EDIT
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        Customer clientSelect = new Customer();
-        selectedIndex = tblClient.getSelectedRow();
-        clientSelect = list.get(selectedIndex);
-        txtID.setText(clientSelect.getID());
-        txtName.setText(clientSelect.getName());
-        txtAddress.setText(clientSelect.getAddress());
-        txtPhone.setText(String.valueOf(clientSelect.getPhone()));
-        showResult();
+    private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
+        
 
-    }//GEN-LAST:event_btnEditActionPerformed
+    }//GEN-LAST:event_btnXuatFileActionPerformed
 
 //DELETE
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -392,6 +415,7 @@ public class CustomerView extends javax.swing.JFrame {
 //UPDATE
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         Customer r = new Customer();
+        String sdt = txtPhone.getText();
         r.setID(txtID.getText());
         r.setName(txtName.getText());
         r.setAddress(txtAddress.getText());
@@ -402,11 +426,20 @@ public class CustomerView extends javax.swing.JFrame {
                     || txtAddress.getText().equals("") || txtPhone.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Hãy điền đầy đủ thông tin!");
             } else {
-                clientsDAO.editClient(r, txtID.getText());
-                JOptionPane.showMessageDialog(rootPane, "Cập nhập thành công!");
-                list.clear();
-                list = clientsDAO.getListClient();
+                if (!isNumeric(sdt)) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
+                    return;
+                } /*else if (checkTrungSDT(sdt)) {
+                    JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại");
+                    return;
+                }*/  else {
+                    clientsDAO.editClient(r, txtID.getText());
+                    JOptionPane.showMessageDialog(rootPane, "Cập nhập thành công!");
+                    list.clear();
+                    list = clientsDAO.getListClient();
+                }
                 showResult();
+
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -462,6 +495,23 @@ public class CustomerView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTKActionPerformed
 
+    private void jScrollPane3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane3MouseClicked
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jScrollPane3MouseClicked
+
+    private void tblClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientMouseClicked
+        // TODO add your handling code here:
+        Customer clientSelect = new Customer();
+        selectedIndex = tblClient.getSelectedRow();
+        clientSelect = list.get(selectedIndex);
+        txtID.setText(clientSelect.getID());
+        txtName.setText(clientSelect.getName());
+        txtAddress.setText(clientSelect.getAddress());
+        txtPhone.setText(String.valueOf(clientSelect.getPhone()));
+        showResult();
+    }//GEN-LAST:event_tblClientMouseClicked
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -475,11 +525,11 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnEdit;
     private javax.swing.JLabel btnHome;
     private javax.swing.JLabel btnRefesh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnXuatFile;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -494,4 +544,5 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JTextField txtTK;
     private javax.swing.JLabel txtTitle;
     // End of variables declaration//GEN-END:variables
+
 }

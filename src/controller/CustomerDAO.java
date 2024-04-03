@@ -3,6 +3,7 @@ package controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Customer;
 
@@ -78,7 +79,6 @@ public class CustomerDAO {
             ps.setString(2, r.getName());
             ps.setString(3, r.getAddress());
             ps.setString(4, r.getPhone());
-            //ps.setFloat(5, r.getPrice());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,11 +116,12 @@ public class CustomerDAO {
     public ArrayList<Customer> getListClienttk(String tk) {
         ArrayList<Customer> list_TK = new ArrayList<>();
         try {
-            String TK = "select * from tbl_KH where ID_KH like ? or Ten_KH like ? or SDT_KH like ?";
+            String TK = "select * from tbl_KH where ID_KH like ? or Ten_KH like ? or DC_KH like ? or SDT_KH like ?";
             PreparedStatement ps = conn.prepareStatement(TK);
             ps.setString(1, "%" + tk + "%");
             ps.setString(2, "%" + tk + "%");
             ps.setString(3, "%" + tk + "%");
+            ps.setString(4, "%" + tk + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Customer KH = new Customer();
@@ -137,5 +138,15 @@ public class CustomerDAO {
         }
 
         return list_TK;
+    }
+    
+    private boolean checkTrungSDT(String sdt) throws ClassNotFoundException, SQLException {
+        String sql = "Select SDT_KH from tbl_KH where SDT_KH = '"+ sdt +"'";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery(sql);
+        if (rs.next()) {
+            return true;
+        }
+        return false;
     }
 }
