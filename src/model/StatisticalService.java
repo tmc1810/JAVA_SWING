@@ -57,7 +57,7 @@ public class StatisticalService {
         this.ID_DV = ID_DV;
     }
 
-    public String getNgayDung() {
+    public String getNgayDung(){
         return NgayDung;
     }
 

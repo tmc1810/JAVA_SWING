@@ -1,12 +1,21 @@
 package view;
 
 import controller.StatisticalDAO;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import model.StatisticalService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class StatisticalServiceView extends javax.swing.JFrame {
 
@@ -23,7 +32,7 @@ public class StatisticalServiceView extends javax.swing.JFrame {
         list = stDAO.getListDTDV();
         model = (DefaultTableModel) tblDTDV.getModel();
         model.setColumnIdentifiers(new Object[]{
-            "STT", "ID", "Tên Dịch Vụ", "Ngày Dùng", "Giá", "Ghi chú", "Số lượng", "Thành tiền"
+            "STT", "ID", "Tên Dịch Vụ", "Ngày Dùng", "Giá", "Số lượng", "Ghi chú", "Thành tiền"
         });
         showTable();
         SumDTDV();
@@ -227,7 +236,7 @@ public class StatisticalServiceView extends javax.swing.JFrame {
                             .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(1, 1, 1)))
                 .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -269,6 +278,57 @@ public class StatisticalServiceView extends javax.swing.JFrame {
 
     private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
         // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        //Tạo một bộ lọc để chỉ hiển thị các file excel
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
+        fileChooser.setFileFilter(filter);
+        //Hiển thị hộp thoại chọn File và lấy kết quả trả về từ người dùng
+        int returnValue = fileChooser.showSaveDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Thống kê dịch vụ");
+
+                Row headerRow = sheet.createRow(0);
+                String[] columns = {"STT", "ID", "Tên Dịch Vụ", "Ngày Dùng", "Giá", "Số lượng", "Ghi chú", "Thành tiền"};
+                for (int i = 0; i < columns.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(columns[i]);
+                }
+                
+                int rowNum = 1;
+                for (StatisticalService TK : list) {
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(rowNum - 1);
+                    row.createCell(1).setCellValue(TK.getID_DV());
+                    row.createCell(2).setCellValue(TK.getTen_DV());
+                    row.createCell(3).setCellValue(TK.getNgayDung());
+                    row.createCell(4).setCellValue(TK.getGia_DV());
+                    row.createCell(5).setCellValue(TK.getSoLuong());
+                    row.createCell(6).setCellValue(TK.getGhiChu());
+                    row.createCell(7).setCellValue(TK.getThanhtien());
+                   
+                }
+                
+                Cell cell = headerRow.createCell(1);
+                cell.setCellValue(columns[1]);
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue("Tổng tiền");
+                row.createCell(1).setCellFormula("SUM(OFFSET(H1,1,0,COUNT(H:H)))");
+                
+                // Lưu workbook vào một file
+                FileOutputStream fileOut = new FileOutputStream(filePath + ".xlsx");
+                workbook.write(fileOut);
+                fileOut.close();
+                workbook.close();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thất bại: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnXuatFileActionPerformed
 
     private void txtDTDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDTDVActionPerformed

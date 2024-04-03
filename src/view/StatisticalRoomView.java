@@ -4,9 +4,19 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import controller.StatisticalDAO;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import model.StatisticalRoom;
+import model.StatisticalService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class StatisticalRoomView extends javax.swing.JFrame {
 
@@ -22,7 +32,7 @@ public class StatisticalRoomView extends javax.swing.JFrame {
         list = stDAO.getListDT();
         model = (DefaultTableModel) tblTHK.getModel();
         model.setColumnIdentifiers(new Object[]{
-            "STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đểm", "Thành tiền"
+            "STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"
         });
         showTable();
         SumDT();
@@ -193,7 +203,7 @@ public class StatisticalRoomView extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtDT, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(jLabel1)
@@ -203,9 +213,9 @@ public class StatisticalRoomView extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dcDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(ThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnXuatFile)))
                 .addContainerGap())
         );
@@ -229,7 +239,7 @@ public class StatisticalRoomView extends javax.swing.JFrame {
                             .addComponent(ThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -267,6 +277,58 @@ public class StatisticalRoomView extends javax.swing.JFrame {
 
     private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
         // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        //Tạo một bộ lọc để chỉ hiển thị các file excel
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
+        fileChooser.setFileFilter(filter);
+        //Hiển thị hộp thoại chọn File và lấy kết quả trả về từ người dùng
+        int returnValue = fileChooser.showSaveDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Thống kê dịch vụ");
+
+                Row headerRow = sheet.createRow(0);
+                String[] columns = {"STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"};
+                for (int i = 0; i < columns.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(columns[i]);
+                }
+                
+                int rowNum = 1;
+                for (StatisticalRoom P : list) {
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(rowNum - 1);
+                    row.createCell(1).setCellValue(P.getID());
+                    row.createCell(2).setCellValue(P.getTen_R());
+                    row.createCell(3).setCellValue(P.getLoai_R());
+                    row.createCell(4).setCellValue(P.getSoGiuong_R());
+                    row.createCell(5).setCellValue(P.getGia_R());
+                    row.createCell(6).setCellValue(P.getNgayNhan());
+                    row.createCell(7).setCellValue(P.getNgayTra());
+                    row.createCell(8).setCellValue(P.getSoDem());
+                    row.createCell(9).setCellValue(P.getThanhtien());
+                }
+                
+                Cell cell = headerRow.createCell(1);
+                cell.setCellValue(columns[1]);
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue("Tổng tiền");
+                row.createCell(1).setCellFormula("SUM(OFFSET(J1,1,0,COUNT(J:J)))");
+                
+                // Lưu workbook vào một file
+                FileOutputStream fileOut = new FileOutputStream(filePath + ".xlsx");
+                workbook.write(fileOut);
+                fileOut.close();
+                workbook.close();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thất bại: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnXuatFileActionPerformed
 
     private void txtDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDTActionPerformed

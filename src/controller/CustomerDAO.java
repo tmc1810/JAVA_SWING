@@ -139,14 +139,4 @@ public class CustomerDAO {
 
         return list_TK;
     }
-    
-    private boolean checkTrungSDT(String sdt) throws ClassNotFoundException, SQLException {
-        String sql = "Select SDT_KH from tbl_KH where SDT_KH = '"+ sdt +"'";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery(sql);
-        if (rs.next()) {
-            return true;
-        }
-        return false;
-    }
 }
