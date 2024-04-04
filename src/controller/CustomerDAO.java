@@ -1,9 +1,11 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import model.Customer;
 
@@ -88,7 +90,7 @@ public class CustomerDAO {
 
     public boolean deleteClient(String id) {
         try {
-            String delete = "delete tbl_KH where ID_KH =?";
+            String delete = "delete tbl_KH where ID_KH = ?";
             PreparedStatement ps = conn.prepareStatement(delete);
             ps.setString(1, id);
             return ps.executeUpdate() > 0;
@@ -138,5 +140,15 @@ public class CustomerDAO {
         }
 
         return list_TK;
+    }
+    
+    public boolean checkTrungSDT(String sdt) throws ClassNotFoundException, SQLException {
+        String sql = "Select SDT_KH from  where SDT_KH = '" + sdt + "'";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        if (rs.next()) {
+            return true;
+        }
+        return false;
     }
 }

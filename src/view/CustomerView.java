@@ -59,6 +59,11 @@ public class CustomerView extends javax.swing.JFrame {
         }
         return true;
     }
+    
+    private boolean isChar(String input) {
+        // Sử dụng phương thức matches() với biểu thức chính quy để kiểm tra
+        return input.matches("[a-zA-Z]+");
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -357,6 +362,9 @@ public class CustomerView extends javax.swing.JFrame {
                 if (!isNumeric(txtPhone.getText())) {
                     JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
                     return;
+                } else if(!isChar(txtName.getText())){
+                    JOptionPane.showMessageDialog(this, "Tên không được có kí tự đặc biệt hoặc số");
+                    return;
                 } else {
                     list.add(r);
                     JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng thành công!");
@@ -366,6 +374,7 @@ public class CustomerView extends javax.swing.JFrame {
                     txtAddress.setText("");
                     txtPhone.setText("");
                 }
+
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng không thành công!");
             }

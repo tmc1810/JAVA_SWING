@@ -271,9 +271,11 @@ public class BookRoomView extends javax.swing.JFrame {
         );
 
         dcDateFrom.setDateFormatString("dd/MM/yyyy");
+        dcDateFrom.setEnabled(false);
         dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         dcDateTo.setDateFormatString("dd/MM/yyyy");
+        dcDateTo.setEnabled(false);
         dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tìm Phòng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 18))); // NOI18N

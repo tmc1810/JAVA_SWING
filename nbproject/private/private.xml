@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/HomeLoginView.java</file>
+            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/CustomerView.java</file>
+            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/BookRoomView.java</file>
+            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/CheckInView.java</file>
+            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/controller/CheckInDAO.java</file>
         </group>
     </open-files>
 </project-private>
