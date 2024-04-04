@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.StatisticalRoom;
-import model.StatisticalService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -288,7 +287,7 @@ public class StatisticalRoomView extends javax.swing.JFrame {
                 File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
                 Workbook workbook = new XSSFWorkbook();
-                Sheet sheet = workbook.createSheet("Thống kê dịch vụ");
+                Sheet sheet = workbook.createSheet("Thống kê doanh thu phòng");
 
                 Row headerRow = sheet.createRow(0);
                 String[] columns = {"STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"};

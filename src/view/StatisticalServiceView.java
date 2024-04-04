@@ -289,7 +289,7 @@ public class StatisticalServiceView extends javax.swing.JFrame {
                 File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
                 Workbook workbook = new XSSFWorkbook();
-                Sheet sheet = workbook.createSheet("Thống kê dịch vụ");
+                Sheet sheet = workbook.createSheet("Thống kê doanh thu dịch vụ");
 
                 Row headerRow = sheet.createRow(0);
                 String[] columns = {"STT", "ID", "Tên Dịch Vụ", "Ngày Dùng", "Giá", "Số lượng", "Ghi chú", "Thành tiền"};
