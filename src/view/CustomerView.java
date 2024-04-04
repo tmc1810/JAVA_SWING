@@ -64,6 +64,10 @@ public class CustomerView extends javax.swing.JFrame {
         // Sử dụng phương thức matches() với biểu thức chính quy để kiểm tra
         return input.matches("[a-zA-Z]+");
     }
+    
+    public boolean kiemTraTrungSDT(String sdt) throws java.sql.SQLException, ClassNotFoundException {
+        return clientsDAO.checkTrungSDT(sdt);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
