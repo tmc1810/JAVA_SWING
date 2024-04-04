@@ -4,8 +4,6 @@ import controller.CustomerDAO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -60,12 +58,6 @@ public class CustomerView extends javax.swing.JFrame {
             }
         }
         return true;
-    }
-    
-    private boolean containsLettersWithAccents(String input) {
-        Pattern pattern = Pattern.compile("\\p{L}+");
-        Matcher matcher = pattern.matcher(input);
-        return matcher.find();
     }
     
     @SuppressWarnings("unchecked")
@@ -367,7 +359,7 @@ public class CustomerView extends javax.swing.JFrame {
                 if (!isNumeric(txtPhone.getText())) {
                     JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
                     return;
-                } else if(!containsLettersWithAccents(txtName.getText())){
+                } else if(isNumeric(txtName.getText())){
                     JOptionPane.showMessageDialog(this, "Phần tên không được ghi số");
                     return;
                 } else {
@@ -486,8 +478,11 @@ public class CustomerView extends javax.swing.JFrame {
                     || txtAddress.getText().equals("") || txtPhone.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "Hãy điền đầy đủ thông tin!");
             } else {
-                if (!isNumeric(sdt)) {
+                if (!isNumeric(txtPhone.getText())) {
                     JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
+                    return;
+                } else if(isNumeric(txtName.getText())){
+                    JOptionPane.showMessageDialog(this, "Phần tên không được ghi số");
                     return;
                 } else {
                     clientsDAO.editClient(r, txtID.getText());
