@@ -5,8 +5,7 @@
         <group>
             <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/CustomerView.java</file>
             <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/BookRoomView.java</file>
-            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/view/CheckInView.java</file>
-            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/controller/CheckInDAO.java</file>
+            <file>file:/C:/Users/tmc18/Documents/GitHub/JAVA_SWING/src/controller/CustomerDAO.java</file>
         </group>
     </open-files>
 </project-private>
