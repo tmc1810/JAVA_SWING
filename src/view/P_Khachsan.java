@@ -14,6 +14,7 @@ public class P_Khachsan extends javax.swing.JFrame {
     private int selectedIndex;
     
     public P_Khachsan() {
+        initComponents();
         this.setLocationRelativeTo(null);
         list = roomDAO.getListRoom();
         model = (DefaultTableModel) tblRoom.getModel();
@@ -22,7 +23,7 @@ public class P_Khachsan extends javax.swing.JFrame {
         });
         showResult();
     }
-    
+     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -349,6 +350,16 @@ public class P_Khachsan extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbbSXActionPerformed
 
+    public void showResult() {
+        model.setRowCount(0);
+        int i = 1;
+        for (Room r : list) {
+            model.addRow(new Object[]{
+                i++, r.getID(), r.getName(), r.getType(), r.getNumberBed(), r.getPrice()
+            });
+        }
+    }
+    
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (txtID.getText().equals("") || txtName.getText().equals("") || txtType.getText().equals("")
                 || txtBed.getText().equals("") || txtPrice.getText().equals("")) {
@@ -370,16 +381,6 @@ public class P_Khachsan extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    public void showResult() {
-        model.setRowCount(0);
-        int i = 1;
-        for (Room r : list) {
-            model.addRow(new Object[]{
-                i++, r.getID(), r.getName(), r.getType(), r.getNumberBed(), r.getPrice()
-            });
-        }
-    }
-    
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         Room roomSelect = new Room();
         selectedIndex = tblRoom.getSelectedRow();
