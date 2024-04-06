@@ -26,10 +26,10 @@ public class TrangChu extends javax.swing.JFrame {
     public TrangChu() {
         initComponents();
         this.setLocationRelativeTo(null);
-        srContent.setVisible(true);
-        btnSR.setVisible(false);
-        btnSS.setVisible(false);
         
+        sroom.setVisible(true);
+        btnSR.setVisible(false);
+        btnSS.setVisible(false);       
         setRoomStatus();
     }
     
@@ -44,12 +44,12 @@ public class TrangChu extends javax.swing.JFrame {
     public void setColorExited(JPanel J) {
         J.setBackground(new Color(255, 255, 255));
     }
-    
+
     private void updateSRoom(String status, String id) {
         if (roomDAO.updateStatusRoom(status, id)) {
-            srContent.removeAll();
-            srContent.setVisible(false);
-            srContent.setVisible(true);
+            sroom.removeAll();
+            sroom.setVisible(false);
+            sroom.setVisible(true);
             setRoomStatus();
             JOptionPane.showMessageDialog(rootPane, "Cập nhật trạng thái thành công!");
         } else {
@@ -59,12 +59,12 @@ public class TrangChu extends javax.swing.JFrame {
 
     private void setRoomStatus() {
         roomStatus = roomDAO.getRoomStatus();
-        srContent.setLayout(new GridLayout(6, 5, 4, 3));
+        sroom.setLayout(new GridLayout(6, 5, 4, 3));
         for (int i = 0; i < roomStatus.size(); i++) {
             String id = roomStatus.get(i).getID();
             JButton rs = new JButton("P" + roomStatus.get(i).getID() + ": " + roomStatus.get(i).getStatus());
             rs.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            rs.setFont(new Font("Segeo UI", Font.ITALIC, 12));
+            rs.setFont(new Font("Segeo UI", Font.ITALIC, 13));
             rs.setForeground(new Color(246, 246, 246));
 
             if (roomStatus.get(i).getStatus().equals("Sẵn sàng")) {
@@ -126,10 +126,11 @@ public class TrangChu extends javax.swing.JFrame {
                     }
                 });
             }
-            srContent.add(rs);
+            sroom.add(rs);
 
         }
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -176,11 +177,11 @@ public class TrangChu extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        sroom = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         navLogin = new javax.swing.JLabel();
         navHome = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        srContent = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -732,6 +733,21 @@ public class TrangChu extends javax.swing.JFrame {
 
         begin.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 270, 450));
 
+        sroom.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout sroomLayout = new javax.swing.GroupLayout(sroom);
+        sroom.setLayout(sroomLayout);
+        sroomLayout.setHorizontalGroup(
+            sroomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 730, Short.MAX_VALUE)
+        );
+        sroomLayout.setVerticalGroup(
+            sroomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 420, Short.MAX_VALUE)
+        );
+
+        begin.add(sroom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 730, 420));
+
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         navLogin.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -759,23 +775,6 @@ public class TrangChu extends javax.swing.JFrame {
         jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 40));
 
         begin.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, -1));
-
-        srContent.setBackground(new java.awt.Color(255, 255, 255));
-        srContent.setForeground(new java.awt.Color(255, 255, 255));
-        srContent.setPreferredSize(new java.awt.Dimension(610, 460));
-
-        javax.swing.GroupLayout srContentLayout = new javax.swing.GroupLayout(srContent);
-        srContent.setLayout(srContentLayout);
-        srContentLayout.setHorizontalGroup(
-            srContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
-        );
-        srContentLayout.setVerticalGroup(
-            srContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 430, Short.MAX_VALUE)
-        );
-
-        begin.add(srContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 730, 430));
 
         jLabel11.setBackground(new java.awt.Color(0, 0, 0));
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
@@ -1055,7 +1054,7 @@ public class TrangChu extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel navHome;
     private javax.swing.JLabel navLogin;
-    private javax.swing.JPanel srContent;
+    private javax.swing.JPanel sroom;
     // End of variables declaration//GEN-END:variables
 
 }
