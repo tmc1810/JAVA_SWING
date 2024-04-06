@@ -1,20 +1,72 @@
 package view;
 
+import controller.StatisticalDAO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import model.StatisticalService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TK_DT_Dichvu extends javax.swing.JFrame {
 
+    private ArrayList<StatisticalService> list;
+    private StatisticalDAO stDAO = new StatisticalDAO();
+    DefaultTableModel model;
+    
     public TK_DT_Dichvu() {
         initComponents();
         this.setLocationRelativeTo(null);
+
+        StatisticalDAO stDAO = new StatisticalDAO();
+        list = stDAO.getListDTDV();
+        model = (DefaultTableModel) tblDTDV.getModel();
+        model.setColumnIdentifiers(new Object[]{
+            "STT", "ID", "Tên Dịch Vụ", "Ngày Dùng", "Giá", "Số lượng", "Ghi chú", "Thành tiền"
+        });
+        showTable();
+        SumDTDV();
     }
 
-    public void setDataChart(JPanel jpnItem){
-        ArrayList<StatisticalService> list;
+    public void showTable() {
+        int i = 1;
+        for (StatisticalService r : list) {
+            model.addRow(new Object[]{
+                i++, r.getID_DV(), r.getTen_DV(), r.getNgayDung(), r.getGia_DV(), r.getSoLuong(),
+                 r.getGhiChu(), r.getThanhtien()
+            });
+        }
     }
+
+    public void showTable1() {
+        int i = 1;
+        model.setRowCount(0);
+        for (StatisticalService r : list1) {
+            model.addRow(new Object[]{
+                i++, r.getID_DV(), r.getTen_DV(), r.getNgayDung(), r.getGia_DV(), r.getSoLuong(),
+                 r.getGhiChu(), r.getThanhtien()
+            });
+        }
+    }
+
+    public void SumDTDV() {
+        DecimalFormat x = new DecimalFormat("###,###,###,###,###,###,###");
+        float Tong = 0;
+        for (int i = 0; i < tblDTDV.getRowCount(); i++) {
+            Tong += Float.parseFloat(tblDTDV.getValueAt(i, 7).toString());
+        }
+        txtDTDV.setText(x.format(Tong) + " " + "VND");
+        txtDTDV.setEditable(false);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -25,13 +77,16 @@ public class TK_DT_Dichvu extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         navHome = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnViewDV = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         dcDateTo = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         dcDateFrom = new com.toedter.calendar.JDateChooser();
         ThongKeDV = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDTDV = new javax.swing.JTable();
+        btnXuatFile = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtDTDV = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,47 +121,23 @@ public class TK_DT_Dichvu extends javax.swing.JFrame {
 
         begin.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, -1));
 
-        btnViewDV.setBackground(new java.awt.Color(112, 26, 98));
-        btnViewDV.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnViewDV.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewDV.setText("Xem Chi Tiết");
-        btnViewDV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewDVActionPerformed(evt);
-            }
-        });
-        begin.add(btnViewDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 80, -1, 50));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1000, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        begin.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1000, 570));
-
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Từ ngày:");
-        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, 30));
+        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, 30));
 
         dcDateTo.setDateFormatString("dd/MM/yyyy");
         dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 190, 50));
+        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 190, 50));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Đến ngày:");
-        begin.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, -1, 30));
+        begin.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, -1, 30));
 
         dcDateFrom.setDateFormatString("dd/MM/yyyy");
         dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 190, 50));
+        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 190, 50));
 
         ThongKeDV.setBackground(new java.awt.Color(112, 26, 98));
         ThongKeDV.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -117,7 +148,43 @@ public class TK_DT_Dichvu extends javax.swing.JFrame {
                 ThongKeDVActionPerformed(evt);
             }
         });
-        begin.add(ThongKeDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 80, 145, 50));
+        begin.add(ThongKeDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 100, 145, 50));
+
+        tblDTDV.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblDTDV);
+
+        begin.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 1020, 490));
+
+        btnXuatFile.setBackground(new java.awt.Color(112, 26, 98));
+        btnXuatFile.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnXuatFile.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/xuatfile.png"))); // NOI18N
+        btnXuatFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatFileActionPerformed(evt);
+            }
+        });
+        begin.add(btnXuatFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 30, 70, 70));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Tổng doanh thu:");
+        begin.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 660, 200, 50));
+
+        txtDTDV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtDTDV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDTDVActionPerformed(evt);
+            }
+        });
+        begin.add(txtDTDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 660, 260, 50));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/maunen.jpg"))); // NOI18N
         jLabel4.setText("jLabel4");
@@ -150,14 +217,74 @@ public class TK_DT_Dichvu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_navHomeMouseClicked
 
-    private void btnViewDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDVActionPerformed
-        new Chitiet_TK_DT_Dichvu().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnViewDVActionPerformed
-
+    private ArrayList<StatisticalService> list1;
     private void ThongKeDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThongKeDVActionPerformed
-
+        StatisticalService ss = new StatisticalService();
+        ss.setDateFrom(dcDateFrom.getDate());
+        ss.setDateTo(dcDateTo.getDate());
+        list1 = stDAO.getListDTDV(ss);
+        showTable1();
+        SumDTDV();
     }//GEN-LAST:event_ThongKeDVActionPerformed
+
+    private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        //Tạo một bộ lọc để chỉ hiển thị các file excel
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
+        fileChooser.setFileFilter(filter);
+        //Hiển thị hộp thoại chọn File và lấy kết quả trả về từ người dùng
+        int returnValue = fileChooser.showSaveDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Thống kê doanh thu dịch vụ");
+
+                Row headerRow = sheet.createRow(0);
+                String[] columns = {"STT", "ID", "Tên Dịch Vụ", "Ngày Dùng", "Giá", "Số lượng", "Ghi chú", "Thành tiền"};
+                for (int i = 0; i < columns.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(columns[i]);
+                }
+
+                int rowNum = 1;
+                for (StatisticalService TK : list) {
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(rowNum - 1);
+                    row.createCell(1).setCellValue(TK.getID_DV());
+                    row.createCell(2).setCellValue(TK.getTen_DV());
+                    row.createCell(3).setCellValue(TK.getNgayDung());
+                    row.createCell(4).setCellValue(TK.getGia_DV());
+                    row.createCell(5).setCellValue(TK.getSoLuong());
+                    row.createCell(6).setCellValue(TK.getGhiChu());
+                    row.createCell(7).setCellValue(TK.getThanhtien());
+
+                }
+
+                Cell cell = headerRow.createCell(1);
+                cell.setCellValue(columns[1]);
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue("Tổng tiền");
+                row.createCell(1).setCellFormula("SUM(OFFSET(H1,1,0,COUNT(H:H)))");
+
+                // Lưu workbook vào một file
+                FileOutputStream fileOut = new FileOutputStream(filePath + ".xlsx");
+                workbook.write(fileOut);
+                fileOut.close();
+                workbook.close();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thất bại: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnXuatFileActionPerformed
+
+    private void txtDTDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDTDVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDTDVActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -194,7 +321,7 @@ public class TK_DT_Dichvu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ThongKeDV;
     private javax.swing.JPanel begin;
-    private javax.swing.JButton btnViewDV;
+    private javax.swing.JButton btnXuatFile;
     private com.toedter.calendar.JDateChooser dcDateFrom;
     private com.toedter.calendar.JDateChooser dcDateTo;
     private javax.swing.JLabel jLabel1;
@@ -202,9 +329,12 @@ public class TK_DT_Dichvu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel navHome;
+    private javax.swing.JTable tblDTDV;
+    private javax.swing.JTextField txtDTDV;
     // End of variables declaration//GEN-END:variables
 }

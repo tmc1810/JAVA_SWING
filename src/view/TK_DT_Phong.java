@@ -1,14 +1,71 @@
 package view;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import controller.StatisticalDAO;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import model.StatisticalRoom;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TK_DT_Phong extends javax.swing.JFrame {
 
+    private ArrayList<StatisticalRoom> list;
+    private StatisticalDAO stDAO = new StatisticalDAO();
+    DefaultTableModel model;
+    
     public TK_DT_Phong() {
         initComponents();
         this.setLocationRelativeTo(null);
+
+        list = stDAO.getListDT();
+        model = (DefaultTableModel) tblTHK.getModel();
+        model.setColumnIdentifiers(new Object[]{
+            "STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"
+        });
+        showTable();
+        SumDT();
     }
 
+    public void showTable() {
+        int i = 1;
+        for (StatisticalRoom r : list) {
+            model.addRow(new Object[]{
+                i++, r.getID(), r.getTen_R(), r.getLoai_R(), r.getSoGiuong_R(), r.getGia_R(),
+                r.getNgayNhan(), r.getNgayTra(), r.getSoDem(), r.getThanhtien()
+            });
+        }
+    }
+
+    public void showTable1() {
+        int i = 1;
+        model.setRowCount(0);
+        for (StatisticalRoom r : list1) {
+            model.addRow(new Object[]{
+                i++, r.getID(), r.getTen_R(), r.getLoai_R(), r.getSoGiuong_R(), r.getGia_R(),
+                r.getNgayNhan(), r.getNgayTra(), r.getSoDem(), r.getThanhtien()
+            });
+        }
+    }
+
+    public void SumDT() {
+        DecimalFormat x = new DecimalFormat("###,###,###,###,###,###,###,###,###");
+        float Tong = 0;
+        for (int i = 0; i < tblTHK.getRowCount(); i++) {
+            Tong += Float.parseFloat((tblTHK.getValueAt(i, 9)).toString());
+        }
+        txtDT.setText(x.format(Tong) + " " + "VND");
+        txtDT.setEditable(false);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -19,13 +76,16 @@ public class TK_DT_Phong extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         navHome = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btnViewRoom = new javax.swing.JButton();
         dcDateFrom = new com.toedter.calendar.JDateChooser();
         ThongKe = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         dcDateTo = new com.toedter.calendar.JDateChooser();
-        jPanel4 = new javax.swing.JPanel();
+        btnXuatFile = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblTHK = new javax.swing.JTable();
+        txtDT = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -60,20 +120,9 @@ public class TK_DT_Phong extends javax.swing.JFrame {
 
         begin.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, -1));
 
-        btnViewRoom.setBackground(new java.awt.Color(112, 26, 98));
-        btnViewRoom.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnViewRoom.setForeground(new java.awt.Color(255, 255, 255));
-        btnViewRoom.setText("Xem Chi Tiết");
-        btnViewRoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewRoomActionPerformed(evt);
-            }
-        });
-        begin.add(btnViewRoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 80, -1, 50));
-
         dcDateFrom.setDateFormatString("dd/MM/yyyy");
         dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 190, 50));
+        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 190, 50));
 
         ThongKe.setBackground(new java.awt.Color(112, 26, 98));
         ThongKe.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -84,34 +133,57 @@ public class TK_DT_Phong extends javax.swing.JFrame {
                 ThongKeActionPerformed(evt);
             }
         });
-        begin.add(ThongKe, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 80, 147, 50));
+        begin.add(ThongKe, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, 147, 50));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Từ ngày:");
-        begin.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, 30));
+        begin.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Đến ngày:");
-        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, -1, 30));
+        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, -1, 30));
 
         dcDateTo.setDateFormatString("dd/MM/yyyy");
         dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 190, 50));
+        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 190, 50));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1000, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        btnXuatFile.setBackground(new java.awt.Color(112, 26, 98));
+        btnXuatFile.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnXuatFile.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/xuatfile.png"))); // NOI18N
+        btnXuatFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatFileActionPerformed(evt);
+            }
+        });
+        begin.add(btnXuatFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 30, 70, 70));
 
-        begin.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 1000, 570));
+        tblTHK.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblTHK);
+
+        begin.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 1020, 510));
+
+        txtDT.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtDT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDTActionPerformed(evt);
+            }
+        });
+        begin.add(txtDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(752, 660, 260, 50));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Tổng doanh thu:");
+        begin.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 660, -1, 50));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/maunen.jpg"))); // NOI18N
         jLabel4.setText("jLabel4");
@@ -142,14 +214,75 @@ public class TK_DT_Phong extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_navHomeMouseClicked
 
-    private void btnViewRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRoomActionPerformed
-        new Chitiet_TK_DT_Phong().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnViewRoomActionPerformed
-
+    private ArrayList<StatisticalRoom> list1;
     private void ThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThongKeActionPerformed
-
+        StatisticalRoom sr = new StatisticalRoom();
+        sr.setDateFrom(dcDateFrom.getDate());
+        sr.setDateTo(dcDateTo.getDate());
+        list1 = stDAO.getListDT(sr);
+        showTable1();
+        SumDT();
     }//GEN-LAST:event_ThongKeActionPerformed
+
+    private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        //Tạo một bộ lọc để chỉ hiển thị các file excel
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx");
+        fileChooser.setFileFilter(filter);
+        //Hiển thị hộp thoại chọn File và lấy kết quả trả về từ người dùng
+        int returnValue = fileChooser.showSaveDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Thống kê doanh thu phòng");
+
+                Row headerRow = sheet.createRow(0);
+                String[] columns = {"STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"};
+                for (int i = 0; i < columns.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(columns[i]);
+                }
+
+                int rowNum = 1;
+                for (StatisticalRoom P : list) {
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(rowNum - 1);
+                    row.createCell(1).setCellValue(P.getID());
+                    row.createCell(2).setCellValue(P.getTen_R());
+                    row.createCell(3).setCellValue(P.getLoai_R());
+                    row.createCell(4).setCellValue(P.getSoGiuong_R());
+                    row.createCell(5).setCellValue(P.getGia_R());
+                    row.createCell(6).setCellValue(P.getNgayNhan());
+                    row.createCell(7).setCellValue(P.getNgayTra());
+                    row.createCell(8).setCellValue(P.getSoDem());
+                    row.createCell(9).setCellValue(P.getThanhtien());
+                }
+
+                Cell cell = headerRow.createCell(1);
+                cell.setCellValue(columns[1]);
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue("Tổng tiền");
+                row.createCell(1).setCellFormula("SUM(OFFSET(J1,1,0,COUNT(J:J)))");
+
+                // Lưu workbook vào một file
+                FileOutputStream fileOut = new FileOutputStream(filePath + ".xlsx");
+                workbook.write(fileOut);
+                fileOut.close();
+                workbook.close();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Xuất Excel thất bại: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnXuatFileActionPerformed
+
+    private void txtDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDTActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -186,7 +319,7 @@ public class TK_DT_Phong extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ThongKe;
     private javax.swing.JPanel begin;
-    private javax.swing.JButton btnViewRoom;
+    private javax.swing.JButton btnXuatFile;
     private com.toedter.calendar.JDateChooser dcDateFrom;
     private com.toedter.calendar.JDateChooser dcDateTo;
     private javax.swing.JLabel jLabel1;
@@ -194,9 +327,12 @@ public class TK_DT_Phong extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel navHome;
+    private javax.swing.JTable tblTHK;
+    private javax.swing.JTextField txtDT;
     // End of variables declaration//GEN-END:variables
 }

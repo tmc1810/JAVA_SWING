@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Bill;
+import model.Service;
 import model.ServiceBill;
+
 
 public class DS_HD_Thuephong extends javax.swing.JFrame {
 
@@ -19,6 +21,7 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
     private ServiceDAO ServiceDAO = new ServiceDAO();
     private int selectedIndex;
     DefaultTableModel model1;
+    DefaultTableModel model2;
     
     public DS_HD_Thuephong() {
         initComponents();
@@ -26,8 +29,13 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
         billList = checkinDAO.getListBill();
         model1 = (DefaultTableModel) tblBill.getModel();
         model1.setColumnIdentifiers(new Object[]{
-            "STT", "Mã Hóa Đơn", "Mã Đặt Phòng", "Tên Phòng", "Trạng Thái"
+            "STT", "Mã Hóa Đơn", "Mã Phòng", "Mã Đặt Phòng", "Mã Nhân Viên", "Ngày Check In", "Giờ Check In", "Ngày Chẹck Out", "Giờ Check Out",
+            "Số Đêm", "Trạng Thái"
         });      
+        model2 = (DefaultTableModel) tblService.getModel();
+        model2.setColumnIdentifiers(new Object[]{
+            "STT", "Mã Dịch Vụ", "Tên Dịch Vụ", "Ngày Dùng", "Đơn Giá", "Số Lượng", "Ghi Chú", "Đền Bù"
+        });
         showResult();
     }
 
@@ -36,7 +44,18 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
         int i = 1;
         for (Bill b : billList) {
             model1.addRow(new Object[]{
-                i++, b.getBillID(), b.getBookingID(), b.getRoomID(), showStatus(b.isStatus())});
+                i++, b.getBillID(), b.getRoomID(), b.getBookingID(), b.getEmployeeID(), b.getDateFrom(), b.getTimeFrom(), b.getDateTo(), b.getTimeTo(),
+                b.getSoDem(), showStatus(b.isStatus())});
+        }
+    }
+
+    public void showResultService() {
+        model2.setRowCount(0);
+        int i = 1;
+        for (ServiceBill sb : svbills) {
+            Service s = ServiceDAO.getSerivce(sb.getServiceID());
+            model2.addRow(new Object[]{
+                i++, sb.getServiceID(), s.getName(), sb.getServiceDay(), s.getPrice(), sb.getServiceAmount(), sb.getServiceNote(), sb.getCompensation()});
         }
     }
 
@@ -70,6 +89,12 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
         btnViewBill = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblBill = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblService = new javax.swing.JTable();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -117,18 +142,18 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("Ngày Check In:");
-        begin.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, 30));
+        begin.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 30));
 
         dcDateFrom.setDateFormatString("dd/MM/yyyy");
-        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 130, -1));
+        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 130, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Ngày Check Out:");
-        begin.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 30));
+        begin.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, -1, 30));
 
         dcDateTo.setDateFormatString("dd/MM/yyyy");
-        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 130, -1));
+        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 130, -1));
 
         txtSearch.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         txtSearch.setForeground(new java.awt.Color(0, 0, 0));
@@ -137,7 +162,7 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
                 txtSearchActionPerformed(evt);
             }
         });
-        begin.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 200, 50));
+        begin.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 200, 40));
 
         btnSearchBill.setBackground(new java.awt.Color(112, 26, 98));
         btnSearchBill.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -148,7 +173,7 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
                 btnSearchBillActionPerformed(evt);
             }
         });
-        begin.add(btnSearchBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 50, 50));
+        begin.add(btnSearchBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 40, 40));
 
         cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " Tất Cả", "Ðã Thanh Toán", "Chưa Thanh Toán" }));
@@ -157,12 +182,12 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
                 cbStatusActionPerformed(evt);
             }
         });
-        begin.add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 190, -1, -1));
+        begin.add(cbStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 150, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Trạng Thái:");
-        begin.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 190, -1, 30));
+        begin.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 150, -1, 30));
 
         btnViewBill.setBackground(new java.awt.Color(112, 26, 98));
         btnViewBill.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -173,7 +198,7 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
                 btnViewBillActionPerformed(evt);
             }
         });
-        begin.add(btnViewBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 130, -1, 60));
+        begin.add(btnViewBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 400, -1, 40));
 
         tblBill.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tblBill.setModel(new javax.swing.table.DefaultTableModel(
@@ -186,7 +211,35 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tblBill);
 
-        begin.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 1020, 500));
+        begin.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 1020, 210));
+
+        tblService.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(tblService);
+
+        begin.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 1020, 280));
+
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+        begin.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 430, 320, 10));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel16.setText("Danh Sách Dịch Vụ Sử Dụng");
+        begin.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 390, -1, 40));
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel17.setText("Danh Sách Hóa Đơn");
+        begin.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, -1, 40));
+
+        jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
+        begin.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, 230, 10));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/maunen.jpg"))); // NOI18N
         begin.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1020, -1));
@@ -263,11 +316,10 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
         String svbills1 = (String) tblBill.getValueAt(selectedIndex, 1);
         if (selectedIndex == -1) {
             JOptionPane.showMessageDialog(rootPane,
-                "Chưa chọn thông tin cần xem!");
+                    "Chưa chọn thông tin cần xem!");
         } else {
             svbills = checkoutDAO.getSerivceBill(svbills1);
-            new Chitiet_HD_Thuephong().setVisible(true);
-            this.dispose();
+            showResultService();
         }
     }//GEN-LAST:event_btnViewBillActionPerformed
 
@@ -312,6 +364,8 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dcDateFrom;
     private com.toedter.calendar.JDateChooser dcDateTo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
@@ -319,9 +373,13 @@ public class DS_HD_Thuephong extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel navHome;
     private javax.swing.JTable tblBill;
+    private javax.swing.JTable tblService;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
