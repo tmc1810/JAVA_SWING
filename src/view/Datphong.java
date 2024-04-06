@@ -251,7 +251,7 @@ public class Datphong extends javax.swing.JFrame {
         dcDateFrom.setDateFormatString("dd/MM/yyyy");
         dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         dcDateFrom.setPreferredSize(new java.awt.Dimension(150, 40));
-        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 270, 190, -1));
+        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 190, -1));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(0, 0, 0));
@@ -261,7 +261,7 @@ public class Datphong extends javax.swing.JFrame {
         dcDateTo.setDateFormatString("dd/MM/yyyy");
         dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         dcDateTo.setPreferredSize(new java.awt.Dimension(150, 40));
-        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 190, 40));
+        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 270, 190, 40));
 
         txtBookingId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtBookingId.setEnabled(false);

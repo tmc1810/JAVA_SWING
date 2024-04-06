@@ -77,11 +77,6 @@ public class Chitiet_TK_DT_Phong extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        dcDateFrom = new com.toedter.calendar.JDateChooser();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        dcDateTo = new com.toedter.calendar.JDateChooser();
-        ThongKe = new javax.swing.JButton();
         btnXuatFile = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTHK = new javax.swing.JTable();
@@ -118,35 +113,6 @@ public class Chitiet_TK_DT_Phong extends javax.swing.JFrame {
         jLabel1.setText("THỐNG KÊ DOANH THU PHÒNG");
         begin.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, -1, 60));
 
-        dcDateFrom.setDateFormatString("dd/MM/yyyy");
-        dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 190, 50));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Từ ngày:");
-        begin.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, -1, 30));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Đến ngày:");
-        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, -1, 30));
-
-        dcDateTo.setDateFormatString("dd/MM/yyyy");
-        dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, 190, 50));
-
-        ThongKe.setBackground(new java.awt.Color(112, 26, 98));
-        ThongKe.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        ThongKe.setForeground(new java.awt.Color(255, 255, 255));
-        ThongKe.setText("Xem Thống kê");
-        ThongKe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ThongKeActionPerformed(evt);
-            }
-        });
-        begin.add(ThongKe, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 147, 50));
-
         btnXuatFile.setBackground(new java.awt.Color(112, 26, 98));
         btnXuatFile.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnXuatFile.setForeground(new java.awt.Color(255, 255, 255));
@@ -156,7 +122,7 @@ public class Chitiet_TK_DT_Phong extends javax.swing.JFrame {
                 btnXuatFileActionPerformed(evt);
             }
         });
-        begin.add(btnXuatFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 100, 50, 50));
+        begin.add(btnXuatFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 30, 70, 70));
 
         tblTHK.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -168,12 +134,12 @@ public class Chitiet_TK_DT_Phong extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblTHK);
 
-        begin.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 1020, 490));
+        begin.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 1020, 540));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Tổng doanh thu:");
-        begin.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 662, -1, 40));
+        begin.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 660, -1, 50));
 
         txtDT.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtDT.addActionListener(new java.awt.event.ActionListener() {
@@ -202,15 +168,6 @@ public class Chitiet_TK_DT_Phong extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private ArrayList<StatisticalRoom> list1;
-    private void ThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThongKeActionPerformed
-        StatisticalRoom sr = new StatisticalRoom();
-        sr.setDateFrom(dcDateFrom.getDate());
-        sr.setDateTo(dcDateTo.getDate());
-        list1 = stDAO.getListDT(sr);
-        showTable1();
-        SumDT();
-    }//GEN-LAST:event_ThongKeActionPerformed
-
     private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
@@ -316,15 +273,10 @@ public class Chitiet_TK_DT_Phong extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ThongKe;
     private javax.swing.JPanel begin;
     private javax.swing.JButton btnXuatFile;
-    private com.toedter.calendar.JDateChooser dcDateFrom;
-    private com.toedter.calendar.JDateChooser dcDateTo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

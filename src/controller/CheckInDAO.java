@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package controller;
 
 import java.sql.Connection;
@@ -8,6 +12,10 @@ import model.Bill;
 import model.CustomerStay;
 import java.sql.ResultSet;
 
+/**
+ *
+ * @author HNT
+ */
 public class CheckInDAO {
 
     DAO DAO = new DAO();
@@ -29,7 +37,13 @@ public class CheckInDAO {
     }
 
     public boolean addBill(Bill b) {
+        // Kiểm tra null trước khi sử dụng
+        if (b.getDateFrom() == null) {
+            System.out.println("Lỗi: Ngày bắt đầu là null!");
+            return false; // hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
+        }
         String insert = "  INSERT INTO tbl_HD(ID_HD,ID_BK, CheckinDate, CheckinTime) VALUES(?,?,?,?)";
+
         try {
             PreparedStatement ps = conn.prepareStatement(insert);
             ps.setString(1, b.getBillID());
@@ -52,7 +66,7 @@ public class CheckInDAO {
             ps.setString(1, cs.getId());
             ps.setString(2, cs.getName());
             ps.setString(3, cs.getCCCD());
-            ps.setDate(4, new Date(cs.getDateOfBirth().getTime()));
+            ps.setDate(4, new java.sql.Date(cs.getDateOfBirth().getTime()));
             ps.setString(5, cs.getQuocTich());
 
             return ps.executeUpdate() > 0;
@@ -118,11 +132,13 @@ public class CheckInDAO {
         ArrayList<Bill> blist = new ArrayList();
         String fstatus = "and hdstatus = " + status;
         String date = "(CheckinDate like ? and CheckoutDate like ?)";
-        if (status == "") 
+        if (status == "") {
             fstatus = "";
-                  
-        if(status == "0")
+        }
+
+        if (status == "0") {
             date = "(CheckinDate like ?)";
+        }
         try {
             String TK = """
                         Select * from tbl_HD inner join tbl_BookedRoom 
@@ -160,11 +176,12 @@ public class CheckInDAO {
                 //thêm vào trong danh sách
                 blist.add(b);
             }
-        System.out.println(TK);
+            System.out.println(TK);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return blist;
     }
+
 }

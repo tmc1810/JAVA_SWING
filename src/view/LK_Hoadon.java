@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Bill;
 import model.BookingRoom;
 
+
 public class LK_Hoadon extends javax.swing.JFrame {
 
     private ArrayList<Bill> colist;
@@ -15,7 +16,7 @@ public class LK_Hoadon extends javax.swing.JFrame {
     private int selectedIndex;
     
     public LK_Hoadon() {
-        initComponents();
+         initComponents();
         this.setLocationRelativeTo(null);
         colist = checkoutDAO.getCheckOutList();
         model = (DefaultTableModel) tblBill.getModel();
@@ -24,9 +25,9 @@ public class LK_Hoadon extends javax.swing.JFrame {
         showTable();
     }
 
-        public void showTable() {
-        int i = 1;
-        model.setRowCount(0);
+    public void showTable() {
+         int i = 1;
+        //model.setRowCount(0);
         for (Bill bill : colist) {
             BookingRoom bookingRoom = new BookingRoom();
             bookingRoom = checkoutDAO.getBooking(bill.getBookingID());
@@ -185,7 +186,7 @@ public class LK_Hoadon extends javax.swing.JFrame {
         selectedIndex = tblBill.getSelectedRow();
         if (selectedIndex == -1) {
             JOptionPane.showMessageDialog(rootPane,
-                "Bạn chưa chọn hóa đơn cần Check out!");
+                "Bạn chưa chọn hóa đơn cần check out!");
         } else {
             Bill bill = new Bill();
             bill = colist.get(selectedIndex);
@@ -200,7 +201,7 @@ public class LK_Hoadon extends javax.swing.JFrame {
         selectedIndex = tblBill.getSelectedRow();
         if (selectedIndex == -1) {
             JOptionPane.showMessageDialog(rootPane,
-                "Bạn chưa chọn hóa đơn cần Check out!");
+                "Bạn chưa chọn hóa đơn cần đặt dịch vụ");
         } else {
             Bill bill = new Bill();
             bill = colist.get(selectedIndex);

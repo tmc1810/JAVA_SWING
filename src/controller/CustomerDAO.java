@@ -1,14 +1,19 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package controller;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import model.Customer;
 
+/**
+ *
+ * @author Minh Duc
+ */
 public class CustomerDAO {
 
     DAO DAO = new DAO();
@@ -81,6 +86,7 @@ public class CustomerDAO {
             ps.setString(2, r.getName());
             ps.setString(3, r.getAddress());
             ps.setString(4, r.getPhone());
+            //ps.setFloat(5, r.getPrice());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,7 +96,7 @@ public class CustomerDAO {
 
     public boolean deleteClient(String id) {
         try {
-            String delete = "delete tbl_KH where ID_KH = ?";
+            String delete = "delete tbl_KH where ID_KH =?";
             PreparedStatement ps = conn.prepareStatement(delete);
             ps.setString(1, id);
             return ps.executeUpdate() > 0;
@@ -118,12 +124,11 @@ public class CustomerDAO {
     public ArrayList<Customer> getListClienttk(String tk) {
         ArrayList<Customer> list_TK = new ArrayList<>();
         try {
-            String TK = "select * from tbl_KH where ID_KH like ? or Ten_KH like ? or DC_KH like ? or SDT_KH like ?";
+            String TK = "select * from tbl_KH where ID_KH like ? or Ten_KH like ? or SDT_KH like ?";
             PreparedStatement ps = conn.prepareStatement(TK);
             ps.setString(1, "%" + tk + "%");
             ps.setString(2, "%" + tk + "%");
             ps.setString(3, "%" + tk + "%");
-            ps.setString(4, "%" + tk + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Customer KH = new Customer();
@@ -141,4 +146,5 @@ public class CustomerDAO {
 
         return list_TK;
     }
+
 }

@@ -1,11 +1,18 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package controller;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import model.Account;
 
+/**
+ *
+ * @author khacc
+ */
 public class AccountDAO {
     DAO DAO = new DAO();
     public Connection conn = DAO.DAO_DB();
@@ -83,5 +90,7 @@ public class AccountDAO {
             e.printStackTrace();
         }
         return info;
-    } 
+    }
+    
+    
 }

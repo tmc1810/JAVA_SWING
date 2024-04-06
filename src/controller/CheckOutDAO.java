@@ -1,4 +1,9 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package controller;
+
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,6 +15,10 @@ import model.BookingRoom;
 import model.CustomerStay;
 import model.ServiceBill;
 
+/**
+ *
+ * @author HNT
+ */
 public class CheckOutDAO {
 
     DAO DAO = new DAO();
@@ -17,7 +26,7 @@ public class CheckOutDAO {
 
     public ArrayList<Bill> getCheckOutList() {
         ArrayList<Bill> bill = new ArrayList();
-        String get = "select * from tbl_HD where hdstatus=1 order by ID_HD desc ";
+        String get = "select * from tbl_HD where hdstatus=0 order by ID_HD desc ";
         try {
             PreparedStatement ps = conn.prepareStatement(get);
 

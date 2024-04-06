@@ -252,14 +252,15 @@ public class DS_Datphong extends javax.swing.JFrame {
         selectedIndex = tblBookingList.getSelectedRow();
         if (selectedIndex == -1) {
             JOptionPane.showMessageDialog(rootPane,
-                "Chưa chọn thông tin đặt phòng cần sửa!");
+                    "Chưa chọn thông tin đặt phòng cần sửa!");
         } else {
             BookingRoom booking = bookingList.get(selectedIndex);
-            Checkin ci = new Checkin();
-            ci.TakeBooking(booking);
-            ci.setVisible(true);
+            Checkin View = new Checkin();
+            View.TakeBooking(booking);
+            View.setVisible(true);
             this.dispose();
         }
+
     }//GEN-LAST:event_btnCheckinActionPerformed
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFilterActionPerformed

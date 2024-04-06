@@ -77,15 +77,10 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        dcDateFrom = new com.toedter.calendar.JDateChooser();
-        dcDateTo = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDTDV = new javax.swing.JTable();
-        ThongKeDV = new javax.swing.JButton();
         btnXuatFile = new javax.swing.JButton();
         txtDTDV = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -118,14 +113,6 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
         jLabel1.setText("THỐNG KÊ DOANH THU DỊCH VỤ");
         begin.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, -1, 50));
 
-        dcDateFrom.setDateFormatString("dd/MM/yyyy");
-        dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, 190, 50));
-
-        dcDateTo.setDateFormatString("dd/MM/yyyy");
-        dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        begin.add(dcDateTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 190, 50));
-
         tblDTDV.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -136,18 +123,7 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblDTDV);
 
-        begin.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 1020, 490));
-
-        ThongKeDV.setBackground(new java.awt.Color(112, 26, 98));
-        ThongKeDV.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        ThongKeDV.setForeground(new java.awt.Color(255, 255, 255));
-        ThongKeDV.setText("Xem Thống kê");
-        ThongKeDV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ThongKeDVActionPerformed(evt);
-            }
-        });
-        begin.add(ThongKeDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 145, 50));
+        begin.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 1020, 540));
 
         btnXuatFile.setBackground(new java.awt.Color(112, 26, 98));
         btnXuatFile.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -158,7 +134,7 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
                 btnXuatFileActionPerformed(evt);
             }
         });
-        begin.add(btnXuatFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 100, 50, 50));
+        begin.add(btnXuatFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 30, 70, 70));
 
         txtDTDV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtDTDV.addActionListener(new java.awt.event.ActionListener() {
@@ -167,16 +143,6 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
             }
         });
         begin.add(txtDTDV, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 660, 260, 50));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Từ ngày:");
-        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, -1, 30));
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Đến ngày:");
-        begin.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, -1, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
@@ -203,16 +169,6 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
 
     private ArrayList<StatisticalService> list1;
     
-    private void ThongKeDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ThongKeDVActionPerformed
-        StatisticalService ss = new StatisticalService();
-        ss.setDateFrom(dcDateFrom.getDate());
-        ss.setDateTo(dcDateTo.getDate());
-        list1 = stDAO.getListDTDV(ss);
-        showTable1();
-        SumDTDV();
-
-    }//GEN-LAST:event_ThongKeDVActionPerformed
-
     private void btnXuatFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatFileActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
@@ -317,16 +273,11 @@ public class Chitiet_TK_DT_Dichvu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ThongKeDV;
     private javax.swing.JPanel begin;
     private javax.swing.JButton btnXuatFile;
-    private com.toedter.calendar.JDateChooser dcDateFrom;
-    private com.toedter.calendar.JDateChooser dcDateTo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel3;
