@@ -13,15 +13,6 @@ public class Bill {
     public Bill() {
         
     }
-    
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
 
     public String getBillID() {
         return BillID;
@@ -47,6 +38,14 @@ public class Bill {
         this.employeeID = employeeID;
     }
 
+    public String getRoomID() {
+        return RoomID;
+    }
+
+    public void setRoomID(String RoomID) {
+        this.RoomID = RoomID;
+    }
+
     public Date getDateFrom() {
         return DateFrom;
     }
@@ -61,14 +60,6 @@ public class Bill {
 
     public void setDateTo(Date DateTo) {
         this.DateTo = DateTo;
-    }
-
-    public int getSoDem() {
-        return SoDem;
-    }
-
-    public void setSoDem(int SoDem) {
-        this.SoDem = SoDem;
     }
 
     public String getTimeFrom() {
@@ -87,12 +78,22 @@ public class Bill {
         this.TimeTo = TimeTo;
     }
 
-    public String getRoomID() {
-        return RoomID;
+    public int getSoDem() {
+        return SoDem;
     }
 
-    public void setRoomID(String RoomID) {
-        this.RoomID = RoomID;
+    public void setSoDem(int SoDem) {
+        this.SoDem = SoDem;
     }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+
     
 }
