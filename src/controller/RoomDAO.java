@@ -208,10 +208,11 @@ public class RoomDAO {
 
     public boolean addRoomStatus(RoomStatus rs) {
         String insertt = "INSERT INTO tbl_RoomStatus(ID_R, statusRoom)"
-                + " VALUES(?,'Sẵn sàng') ";
+                + " VALUES(?,?) ";
         try {
             PreparedStatement ps = conn.prepareStatement(insertt);
             ps.setString(1, rs.getID_R());
+            ps.setString(2,"Sẵn sàng");
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

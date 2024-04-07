@@ -376,7 +376,6 @@ public class P_Khachsan extends javax.swing.JFrame {
             r.setPrice(Float.parseFloat(txtPrice.getText()));
             if (roomDAO.addRoom(r) && roomDAO.addRoomStatus(rs)) {
                 JOptionPane.showMessageDialog(rootPane, "Thêm phòng thành công!");
-                list.add(rs);
                 list.add(r);
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Thêm phòng không thành công, hãy kiểm tra lại thông tin!");
