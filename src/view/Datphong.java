@@ -486,13 +486,17 @@ public class Datphong extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        FindRoom f = new FindRoom();
-        f.setType(String.valueOf(cbTypeFind.getSelectedItem()));
-        f.setBed(Integer.parseInt(txtBedFind.getText()));
-        f.setDateFrom(dcDateFrom.getDate());
-        f.setDateTo(dcDateTo.getDate());
-        roomFound = bookingRoomDAO.getRoomFound(f);
-        showResult();
+        if(Integer.parseInt(txtBedFind.getText()) < 3 && Integer.parseInt(txtBedFind.getText()) > 0){
+            FindRoom f = new FindRoom();
+            f.setType(String.valueOf(cbTypeFind.getSelectedItem()));
+            f.setBed(Integer.parseInt(txtBedFind.getText()));
+            f.setDateFrom(dcDateFrom.getDate());
+            f.setDateTo(dcDateTo.getDate());
+            roomFound = bookingRoomDAO.getRoomFound(f);
+            showResult();
+        } else {
+            JOptionPane.showMessageDialog(rootPane,"Chỉ có 1 giường và 2 giường !!!");
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
