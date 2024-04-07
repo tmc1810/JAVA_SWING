@@ -519,6 +519,8 @@ public class Checkout extends javax.swing.JFrame {
         new RoomDAO().updateStatusRoom("Chưa sẵn sàng", txtRoomID.getText());
         new CheckOutDAO().updateStatusBill(bill.getBillID(), "1");
         JOptionPane.showMessageDialog(rootPane, "Check out thành công!");
+        new TrangChu().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCheckOutActionPerformed
 
     private void btnSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumActionPerformed
