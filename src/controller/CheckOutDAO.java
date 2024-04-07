@@ -26,7 +26,7 @@ public class CheckOutDAO {
 
     public ArrayList<Bill> getCheckOutList() {
         ArrayList<Bill> bill = new ArrayList();
-        String get = "select * from tbl_HD where hdstatus=0 order by ID_HD desc ";
+        String get = "select * from tbl_HD where hdstatus=1 order by ID_HD desc ";
         try {
             PreparedStatement ps = conn.prepareStatement(get);
 

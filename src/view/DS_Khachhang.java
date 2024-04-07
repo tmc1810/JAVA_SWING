@@ -11,6 +11,7 @@ import model.Customer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,6 +21,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
     private CustomerDAO clientsDAO = new CustomerDAO();
     private ArrayList<Customer> list;
     DefaultTableModel model;
+    private boolean Choose = false;
     private int selectedIndex;
     
     public DS_Khachhang() {
@@ -218,7 +220,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
         btnUpdate.setBackground(new java.awt.Color(112, 26, 98));
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/sua.png"))); // NOI18N
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/chinhsua.png"))); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -300,7 +302,8 @@ public class DS_Khachhang extends javax.swing.JFrame {
         txtName.setText("");
         txtAddress.setText("");
         txtPhone.setText("");
-        showResult();
+        model.setRowCount(0);
+        showTable();
     }//GEN-LAST:event_btnRefeshMouseClicked
 
     private void navHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navHomeMouseClicked
@@ -319,7 +322,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAddressActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        CustomerDAO ClientsInfomationDAO = new CustomerDAO();
+        String SDT = txtPhone.getText();
         Customer r = new Customer();
         txtID.setText(String.valueOf(clientsDAO.getClientId()));
         r.setID(txtID.getText());
@@ -329,25 +332,21 @@ public class DS_Khachhang extends javax.swing.JFrame {
         try {
             if (txtID.getText().equals("") || txtName.getText().equals("")
                 || txtAddress.getText().equals("") || txtPhone.getText().equals("")) {
-                JOptionPane.showMessageDialog(this, "Hãy điền đầy đủ thông tin!");
-            } else if (ClientsInfomationDAO.addClient(r)) {
-
-                if (!isNumeric(txtPhone.getText())) {
-                    JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
-                    return;
-                } else if(isNumeric(txtName.getText())){
-                    JOptionPane.showMessageDialog(this, "Phần tên không được ghi số");
-                    return;
-                } else {
-                    list.add(r);
-                    JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng thành công!");
-                    showResult();
-                    txtID.setText("");
-                    txtName.setText("");
-                    txtAddress.setText("");
-                    txtPhone.setText("");
-                }
-
+                JOptionPane.showMessageDialog(rootPane, "Hãy điền đầy đủ thông tin!");
+            } else if (!isNumeric(txtPhone.getText())) {
+                    JOptionPane.showMessageDialog(rootPane, "Vui lòng nhập số cho số điện thoại!");
+            } else if(isNumeric(txtName.getText())){
+                JOptionPane.showMessageDialog(rootPane, "Phần tên không được ghi số");
+            } else if(clientsDAO.checkTrungSDT(SDT)){
+                JOptionPane.showMessageDialog(rootPane, "Số điện thoại đã tồn tại");
+            } else if(clientsDAO.addClient(r)){
+                list.add(r);
+                JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng thành công!");
+                showResult();
+                txtID.setText("");
+                txtName.setText("");
+                txtAddress.setText("");
+                txtPhone.setText("");
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng không thành công!");
             }
@@ -361,7 +360,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
     public void showResult() {
         model.setRowCount(0);
         int i = 1;
-        for (Customer r : list) {
+        for (Customer r : list1) {
             model.addRow(new Object[]{
                 i++, r.getID(), r.getName(), r.getAddress(), r.getPhone()
             });
@@ -380,11 +379,13 @@ public class DS_Khachhang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private ArrayList<Customer> list1;
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         if (txtTK.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Hãy nhập thông tin khách hàng cần tìm!");
         } else {
-            list = clientsDAO.getListClienttk(txtTK.getText());
+            list1 = clientsDAO.getListClienttk(txtTK.getText());
+            Choose = true;
             showResult();
         }
 
@@ -404,23 +405,44 @@ public class DS_Khachhang extends javax.swing.JFrame {
                 Workbook workbook = new XSSFWorkbook();
                 Sheet sheet = workbook.createSheet("Danh sách Thông tin khách hàng đặt");
 
-                Row headerRow = sheet.createRow(0);
-                String[] columns = {"STT", "Mã khách hàng", "Tên khách hàng", "SĐT","Địa chỉ"};
-                for (int i = 0; i < columns.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(columns[i]);
+                Row title = sheet.createRow(0);
+                title.setHeight((short) 400);
+                Cell o = title.createCell(0, CellType.STRING);
+                o.setCellValue("DANH SÁCH KHÁCH HÀNG");
+                
+                if(Choose = true){
+                    Row headerRow = sheet.createRow(2);
+                    String[] columns = {"STT", "Mã khách hàng", "Tên khách hàng", "SĐT","Địa chỉ"};
+                    for (int i = 0; i < columns.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columns[i]);
+                    }
+                    int rowNum = 3;
+                    for (Customer KH : list1) {
+                        Row row = sheet.createRow(rowNum++);
+                        row.createCell(0).setCellValue(rowNum - 3);
+                        row.createCell(1).setCellValue(KH.getID());
+                        row.createCell(2).setCellValue(KH.getName());
+                        row.createCell(3).setCellValue(KH.getPhone());
+                        row.createCell(4).setCellValue(KH.getAddress());
+                    }
+                } else {
+                    Row headerRow = sheet.createRow(2);
+                    String[] columns = {"STT", "Mã khách hàng", "Tên khách hàng", "SĐT","Địa chỉ"};
+                    for (int i = 0; i < columns.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columns[i]);
+                    }
+                    int rowNum = 3;
+                    for (Customer KH : list) {
+                        Row row = sheet.createRow(rowNum++);
+                        row.createCell(0).setCellValue(rowNum - 3);
+                        row.createCell(1).setCellValue(KH.getID());
+                        row.createCell(2).setCellValue(KH.getName());
+                        row.createCell(3).setCellValue(KH.getPhone());
+                        row.createCell(4).setCellValue(KH.getAddress());
+                    }
                 }
-
-                int rowNum = 1;
-                for (Customer KH : list) {
-                    Row row = sheet.createRow(rowNum++);
-                    row.createCell(0).setCellValue(rowNum - 1);
-                    row.createCell(1).setCellValue(KH.getID());
-                    row.createCell(2).setCellValue(KH.getName());
-                    row.createCell(3).setCellValue(KH.getPhone());
-                    row.createCell(4).setCellValue(KH.getAddress());
-                }
-
                 // Lưu workbook vào một file
                 FileOutputStream fileOut = new FileOutputStream(filePath + ".xlsx");
                 workbook.write(fileOut);
@@ -435,41 +457,38 @@ public class DS_Khachhang extends javax.swing.JFrame {
     }//GEN-LAST:event_btnXuatFileActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String SDT = txtPhone.getText();
         Customer r = new Customer();
-        String sdt = txtPhone.getText();
         r.setID(txtID.getText());
         r.setName(txtName.getText());
         r.setAddress(txtAddress.getText());
         r.setPhone(txtPhone.getText());
 
         try {
-            if (txtID.getText().equals("") || txtName.getText().equals("")
+             if (txtID.getText().equals("") || txtName.getText().equals("")
                 || txtAddress.getText().equals("") || txtPhone.getText().equals("")) {
-                JOptionPane.showMessageDialog(this, "Hãy điền đầy đủ thông tin!");
+                JOptionPane.showMessageDialog(rootPane, "Hãy điền đầy đủ thông tin!");
+            } else if (!isNumeric(txtPhone.getText())) {
+                    JOptionPane.showMessageDialog(rootPane, "Vui lòng nhập số cho số điện thoại!");
+            } else if(isNumeric(txtName.getText())){
+                JOptionPane.showMessageDialog(rootPane, "Phần tên không được ghi số");
+            } else if(clientsDAO.checkTrungSDT(SDT)){
+                JOptionPane.showMessageDialog(rootPane, "Số điện thoại đã tồn tại");
             } else {
-                if (!isNumeric(txtPhone.getText())) {
-                    JOptionPane.showMessageDialog(this, "Vui lòng nhập số cho số điện thoại!");
-                    return;
-                } else if(isNumeric(txtName.getText())){
-                    JOptionPane.showMessageDialog(this, "Phần tên không được ghi số");
-                    return;
-                } else {
-                    clientsDAO.editClient(r, txtID.getText());
-                    JOptionPane.showMessageDialog(rootPane, "Cập nhập thành công!");
-                    list.clear();
-                    list = clientsDAO.getListClient();
-                }
+                clientsDAO.editClient(r, txtID.getText());
+                JOptionPane.showMessageDialog(rootPane, "Cập nhập thành công!");
+                list.clear();
+                list = clientsDAO.getListClient();
                 showResult();
-
+                //reset text field
+                txtID.setText("");
+                txtName.setText("");
+                txtAddress.setText("");
+                txtPhone.setText("");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Cập nhật khách hàng không thành công!");
         }
-        //reset text field
-        txtID.setText("");
-        txtName.setText("");
-        txtAddress.setText("");
-        txtPhone.setText("");
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void txtTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTKActionPerformed

@@ -1,19 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Customer;
 
-/**
- *
- * @author Minh Duc
- */
 public class CustomerDAO {
 
     DAO DAO = new DAO();
@@ -124,11 +118,12 @@ public class CustomerDAO {
     public ArrayList<Customer> getListClienttk(String tk) {
         ArrayList<Customer> list_TK = new ArrayList<>();
         try {
-            String TK = "select * from tbl_KH where ID_KH like ? or Ten_KH like ? or SDT_KH like ?";
+            String TK = "select * from tbl_KH where ID_KH like ? or Ten_KH like ? or DC_KH like ? or SDT_KH like ?";
             PreparedStatement ps = conn.prepareStatement(TK);
             ps.setString(1, "%" + tk + "%");
             ps.setString(2, "%" + tk + "%");
             ps.setString(3, "%" + tk + "%");
+            ps.setString(4, "%" + tk + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Customer KH = new Customer();
@@ -147,4 +142,13 @@ public class CustomerDAO {
         return list_TK;
     }
 
+    public boolean checkTrungSDT(String SDT) throws SQLException{
+        String sql = "SELECT SDT_KH from tbl_KH where SDT_KH = '"+ SDT +"'";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        if(rs.next()){
+            return true;
+        }
+        return false;
+    }
 }

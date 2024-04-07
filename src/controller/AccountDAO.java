@@ -62,7 +62,7 @@ public class AccountDAO {
             ps.setString(3, acc.getName());
             ps.setString(4, acc.getPosition());
             ps.setString(5, acc.getPhone());
-            ps.executeUpdate();
+            ps.executeQuery();
             
         } catch (Exception e) {
             e.printStackTrace(); 

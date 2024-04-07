@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.StatisticalRoom;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -20,6 +21,7 @@ public class TK_DT_Phong extends javax.swing.JFrame {
 
     private ArrayList<StatisticalRoom> list;
     private StatisticalDAO stDAO = new StatisticalDAO();
+    private boolean Choose = false;
     DefaultTableModel model;
     
     public TK_DT_Phong() {
@@ -74,12 +76,13 @@ public class TK_DT_Phong extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
         navHome = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         dcDateFrom = new com.toedter.calendar.JDateChooser();
         ThongKe = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         dcDateTo = new com.toedter.calendar.JDateChooser();
         btnXuatFile = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -104,9 +107,21 @@ public class TK_DT_Phong extends javax.swing.JFrame {
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel7.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-reset-32.png"))); // NOI18N
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, -1, 40));
+
         navHome.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         navHome.setForeground(new java.awt.Color(255, 255, 255));
         navHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-home-32-view.png"))); // NOI18N
+        navHome.setText("|");
         navHome.setToolTipText("");
         navHome.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -116,9 +131,9 @@ public class TK_DT_Phong extends javax.swing.JFrame {
         jPanel3.add(navHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 50, 40));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/maunen2.jpg"))); // NOI18N
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 40));
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 40));
 
-        begin.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, -1));
+        begin.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, -1));
 
         dcDateFrom.setDateFormatString("dd/MM/yyyy");
         dcDateFrom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -140,10 +155,10 @@ public class TK_DT_Phong extends javax.swing.JFrame {
         jLabel2.setText("Từ ngày:");
         begin.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, 30));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Đến ngày:");
-        begin.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, -1, 30));
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Đến ngày:");
+        begin.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, -1, 30));
 
         dcDateTo.setDateFormatString("dd/MM/yyyy");
         dcDateTo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -220,6 +235,7 @@ public class TK_DT_Phong extends javax.swing.JFrame {
         sr.setDateFrom(dcDateFrom.getDate());
         sr.setDateTo(dcDateTo.getDate());
         list1 = stDAO.getListDT(sr);
+        Choose = true;
         showTable1();
         SumDT();
     }//GEN-LAST:event_ThongKeActionPerformed
@@ -239,34 +255,62 @@ public class TK_DT_Phong extends javax.swing.JFrame {
                 Workbook workbook = new XSSFWorkbook();
                 Sheet sheet = workbook.createSheet("Thống kê doanh thu phòng");
 
-                Row headerRow = sheet.createRow(0);
-                String[] columns = {"STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"};
-                for (int i = 0; i < columns.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(columns[i]);
-                }
+                Row title = sheet.createRow(0);
+                title.setHeight((short) 400);
+                Cell o = title.createCell(0, CellType.STRING);
+                o.setCellValue("THỐNG KÊ DOANH THU PHÒNG");
 
-                int rowNum = 1;
-                for (StatisticalRoom P : list) {
+                if(Choose == true){
+                    Row headerRow = sheet.createRow(2);
+                    String[] columns = {"STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"};
+                    for (int i = 0; i < columns.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columns[i]);
+                    }
+                    int rowNum = 3;
+                    for (StatisticalRoom P : list1) {
+                        Row row = sheet.createRow(rowNum++);
+                        row.createCell(0).setCellValue(rowNum - 3);
+                        row.createCell(1).setCellValue(P.getID());
+                        row.createCell(2).setCellValue(P.getTen_R());
+                        row.createCell(3).setCellValue(P.getLoai_R());
+                        row.createCell(4).setCellValue(P.getSoGiuong_R());
+                        row.createCell(5).setCellValue(P.getGia_R());
+                        row.createCell(6).setCellValue(P.getNgayNhan());
+                        row.createCell(7).setCellValue(P.getNgayTra());
+                        row.createCell(8).setCellValue(P.getSoDem());
+                        row.createCell(9).setCellValue(P.getThanhtien());
+                    }
+                    
                     Row row = sheet.createRow(rowNum++);
-                    row.createCell(0).setCellValue(rowNum - 1);
-                    row.createCell(1).setCellValue(P.getID());
-                    row.createCell(2).setCellValue(P.getTen_R());
-                    row.createCell(3).setCellValue(P.getLoai_R());
-                    row.createCell(4).setCellValue(P.getSoGiuong_R());
-                    row.createCell(5).setCellValue(P.getGia_R());
-                    row.createCell(6).setCellValue(P.getNgayNhan());
-                    row.createCell(7).setCellValue(P.getNgayTra());
-                    row.createCell(8).setCellValue(P.getSoDem());
-                    row.createCell(9).setCellValue(P.getThanhtien());
+                    row.createCell(0).setCellValue("Tổng tiền");
+                    row.createCell(1).setCellFormula("SUM(OFFSET(J3,1,0,COUNT(J:J)))");
+                } else {
+                    Row headerRow = sheet.createRow(2);
+                    String[] columns = {"STT", "ID", "Tên Phòng", "Loại", "Số Giường", "Giá(/Đêm)", "Ngày nhận", "Ngày trả", "Số đêm", "Thành tiền"};
+                    for (int i = 0; i < columns.length; i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(columns[i]);
+                    }
+                    int rowSo = 3;
+                    for (StatisticalRoom P : list) {
+                        Row row = sheet.createRow(rowSo++);
+                        row.createCell(0).setCellValue(rowSo - 3);
+                        row.createCell(1).setCellValue(P.getID());
+                        row.createCell(2).setCellValue(P.getTen_R());
+                        row.createCell(3).setCellValue(P.getLoai_R());
+                        row.createCell(4).setCellValue(P.getSoGiuong_R());
+                        row.createCell(5).setCellValue(P.getGia_R());
+                        row.createCell(6).setCellValue(P.getNgayNhan());
+                        row.createCell(7).setCellValue(P.getNgayTra());
+                        row.createCell(8).setCellValue(P.getSoDem());
+                        row.createCell(9).setCellValue(P.getThanhtien());
+                    }
+                    Row row = sheet.createRow(rowSo++);
+                    row.createCell(0).setCellValue("Tổng tiền");
+                    row.createCell(1).setCellFormula("SUM(OFFSET(J3,1,0,COUNT(J:J)))");
                 }
-
-                Cell cell = headerRow.createCell(1);
-                cell.setCellValue(columns[1]);
-                Row row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue("Tổng tiền");
-                row.createCell(1).setCellFormula("SUM(OFFSET(J1,1,0,COUNT(J:J)))");
-
+                
                 // Lưu workbook vào một file
                 FileOutputStream fileOut = new FileOutputStream(filePath + ".xlsx");
                 workbook.write(fileOut);
@@ -283,6 +327,14 @@ public class TK_DT_Phong extends javax.swing.JFrame {
     private void txtDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDTActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDTActionPerformed
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        // TODO add your handling code here:\
+        dcDateFrom.setDate(null);
+        dcDateTo.setDate(null);
+        model.setRowCount(0);
+        showTable();
+    }//GEN-LAST:event_jLabel7MouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -326,8 +378,9 @@ public class TK_DT_Phong extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
