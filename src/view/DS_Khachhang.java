@@ -381,7 +381,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
         if (clientsDAO.deleteClient(id)) {
             int DelIndex = tblClient.getSelectedRow();
             list.remove(DelIndex);
-            showResult();
+            showResult1();
             JOptionPane.showMessageDialog(rootPane, "Xóa khách hàng thành công!");        // TODO add your handling code here:
         } else {
             JOptionPane.showMessageDialog(rootPane, "Xoá khách hàng không thành công!");        // TODO add your handling code here:
