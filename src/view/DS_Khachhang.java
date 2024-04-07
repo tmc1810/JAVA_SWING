@@ -303,7 +303,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
         txtAddress.setText("");
         txtPhone.setText("");
         model.setRowCount(0);
-        showTable();
+        showResult1();
     }//GEN-LAST:event_btnRefeshMouseClicked
 
     private void navHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navHomeMouseClicked
@@ -342,7 +342,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
             } else if(clientsDAO.addClient(r)){
                 list.add(r);
                 JOptionPane.showMessageDialog(rootPane, "Thêm khách hàng thành công!");
-                showResult();
+                showResult1();
                 txtID.setText("");
                 txtName.setText("");
                 txtAddress.setText("");
@@ -367,6 +367,15 @@ public class DS_Khachhang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
+    public void showResult1() {
+        model.setRowCount(0);
+        int i = 1;
+        for (Customer r : list) {
+            model.addRow(new Object[]{
+                i++, r.getID(), r.getName(), r.getAddress(), r.getPhone()
+            });
+        }
+    }     
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         String id = tblClient.getValueAt(tblClient.getSelectedRow(), 1).toString();
         if (clientsDAO.deleteClient(id)) {
@@ -479,7 +488,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Cập nhập thành công!");
                 list.clear();
                 list = clientsDAO.getListClient();
-                showResult();
+                showResult1();
                 //reset text field
                 txtID.setText("");
                 txtName.setText("");
@@ -505,7 +514,7 @@ public class DS_Khachhang extends javax.swing.JFrame {
         txtName.setText(clientSelect.getName());
         txtAddress.setText(clientSelect.getAddress());
         txtPhone.setText(String.valueOf(clientSelect.getPhone()));
-        showResult();
+        showResult1();
     }//GEN-LAST:event_tblClientMouseClicked
 
     private void jScrollPane3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane3MouseClicked

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Room;
+import model.RoomStatus;
 
 public class P_Khachsan extends javax.swing.JFrame {
 
@@ -366,13 +367,16 @@ public class P_Khachsan extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Hãy điền đầy đủ thông tin của phòng!");
         } else {
             Room r = new Room();
+            RoomStatus rs = new RoomStatus();
+            rs.setID_R(txtID.getText());
             r.setID(txtID.getText());
             r.setName(txtName.getText());
             r.setType(txtType.getText());
             r.setNumberBed(Integer.parseInt(txtBed.getText()));
             r.setPrice(Float.parseFloat(txtPrice.getText()));
-            if (roomDAO.addRoom(r)) {
+            if (roomDAO.addRoom(r) && roomDAO.addRoomStatus(rs)) {
                 JOptionPane.showMessageDialog(rootPane, "Thêm phòng thành công!");
+                list.add(rs);
                 list.add(r);
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Thêm phòng không thành công, hãy kiểm tra lại thông tin!");
@@ -421,8 +425,9 @@ public class P_Khachsan extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         String id = tblRoom.getValueAt(tblRoom.getSelectedRow(), 1).toString();
+         String id1 = tblRoom.getValueAt(tblRoom.getSelectedRow(), 1).toString();
         int DelIndex = tblRoom.getSelectedRow();
-        if (roomDAO.deleteRoom(id)) {
+        if (roomDAO.deleteRoom(id) && roomDAO.deleteRoomStatus(id1)) {
             list.remove(DelIndex);
             showResult();
             JOptionPane.showMessageDialog(rootPane, "Xóa phòng thành công");

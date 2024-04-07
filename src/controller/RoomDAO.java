@@ -206,6 +206,19 @@ public class RoomDAO {
         return false;
     }
 
+    public boolean addRoomStatus(RoomStatus rs) {
+        String insertt = "INSERT INTO tbl_RoomStatus(ID_R, statusRoom)"
+                + " VALUES(?,'Sẵn sàng') ";
+        try {
+            PreparedStatement ps = conn.prepareStatement(insertt);
+            ps.setString(1, rs.getID_R());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean deleteRoom(String id) {
         try {
             String delete = "delete tbl_HotelRoom where ID_R =?";
@@ -218,6 +231,17 @@ public class RoomDAO {
         return true;
     }
 
+    public boolean deleteRoomStatus(String id1) {
+        try {
+            String deletee = "delete tbl_RoomStatus where ID_R =?";
+            PreparedStatement ps = conn.prepareStatement(deletee);
+            ps.setString(1, id1);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
     public boolean editRoom(Room r, String id) {
         try {
             String editR = "update tbl_HotelRoom set Ten_R=?, Loai_R=?, SoGiuong_R=?, Gia_R=? where ID_R=?";
